@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ChatGPT Fake Moderno</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: system-ui, sans-serif;
+    background: linear-gradient(135deg,#0f172a,#111827,#1e293b);
+    color:white;
+    overflow:hidden;
+}
+
+/* ================= LOGIN ================= */
+
+.center{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    padding:20px;
+}
+
+.login-box{
+    width:380px;
+    padding:35px;
+    border-radius:25px;
+
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+
+    border:1px solid rgba(255,255,255,0.1);
+
+    box-shadow:
+    0 0 30px rgba(0,0,0,0.4),
+    0 0 60px rgba(25,195,125,0.15);
+
+    animation:fadeUp .8s ease;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.logo{
+    font-size:55px;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.login-box h1{
+    text-align:center;
+    margin-bottom:5px;
+    font-size:28px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#b4b4b4;
+    margin-bottom:30px;
+    font-size:14px;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    color:#d1d5db;
+    font-size:14px;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border:none;
+    outline:none;
+    border-radius:14px;
+
+    background:#1f2937;
+    color:white;
+
+    transition:0.3s;
+    font-size:15px;
+}
+
+.input-group input:focus{
+    border:1px solid #19c37d;
+    box-shadow:0 0 15px rgba(25,195,125,.4);
+    transform:scale(1.02);
+}
+
+.login-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+
+    background:linear-gradient(135deg,#19c37d,#14a76c);
+    color:white;
+
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.login-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px rgba(25,195,125,.35);
+}
+
+.footer{
+    text-align:center;
+    margin-top:20px;
+    color:#9ca3af;
+    font-size:13px;
+}
+
+/* ================= CHAT ================= */
+
+#chatApp{
+    display:none;
+    height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:240px;
+    background:#111827;
+    border-right:1px solid rgba(255,255,255,0.05);
+    padding:20px;
+
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.sidebar h2{
+    font-size:22px;
+    margin-bottom:10px;
+}
+
+.new-chat{
+    background:#19c37d;
+    color:white;
+    padding:12px;
+    border-radius:12px;
+    text-align:center;
+    cursor:pointer;
+    transition:0.3s;
+    font-weight:bold;
+}
+
+.new-chat:hover{
+    transform:scale(1.03);
+}
+
+/* CHAT AREA */
+
+.chat-container{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    background:#0f172a;
+}
+
+.chat-header{
+    padding:20px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
+    background:#111827;
+}
+
+#messages{
+    flex:1;
+    overflow-y:auto;
+    padding:25px;
+}
+
+/* SCROLL */
+
+#messages::-webkit-scrollbar{
+    width:8px;
+}
+
+#messages::-webkit-scrollbar-thumb{
+    background:#19c37d;
+    border-radius:10px;
+}
+
+/* MESSAGES */
+
+.message{
+    display:flex;
+    margin-bottom:15px;
+    animation:msgIn .4s ease;
+}
+
+@keyframes msgIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.user{
+    justify-content:flex-end;
+}
+
+.bot{
+    justify-content:flex-start;
+}
+
+.bubble{
+    max-width:70%;
+    padding:14px 18px;
+    border-radius:18px;
+    line-height:1.5;
+    word-wrap:break-word;
+}
+
+.user .bubble{
+    background:#19c37d;
+    color:black;
+    border-bottom-right-radius:5px;
+}
+
+.bot .bubble{
+    background:#1e293b;
+    border-bottom-left-radius:5px;
+}
+
+/* INPUT AREA */
+
+.input-area{
+    padding:20px;
+    display:flex;
+    gap:12px;
+    border-top:1px solid rgba(255,255,255,0.08);
+    background:#111827;
+}
+
+.input-area input{
+    flex:1;
+    padding:15px;
+    border:none;
+    outline:none;
+    border-radius:15px;
+    background:#1f2937;
+    color:white;
+    font-size:15px;
+}
+
+.send-btn{
+    width:55px;
+    border:none;
+    border-radius:15px;
+    background:#19c37d;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.send-btn:hover{
+    transform:scale(1.05);
+}
+
+/* DIGITANDO */
+
+.typing{
+    display:flex;
+    gap:5px;
+}
+
+.dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:white;
+    animation:blink 1.4s infinite;
+}
+
+.dot:nth-child(2){
+    animation-delay:.2s;
+}
+
+.dot:nth-child(3){
+    animation-delay:.4s;
+}
+
+@keyframes blink{
+    0%,80%,100%{
+        opacity:0.3;
+    }
+    40%{
+        opacity:1;
+    }
+}
+
+/* RESPONSIVO */
+
+@media(max-width:700px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .login-box{
+        width:100%;
+        max-width:400px;
+    }
+
+    .bubble{
+        max-width:90%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginScreen" class="center">
+
+    <div class="login-box">
+
+        <div class="logo">🤖</div>
+
+        <h1>Bem-vindo</h1>
+
+        <div class="subtitle">
+            Faça login para continuar
+        </div>
+
+        <div class="input-group">
+            <label>Usuário</label>
+            <input type="text" id="user" placeholder="Digite seu usuário">
+        </div>
+
+        <div class="input-group">
+            <label>Senha</label>
+            <input type="password" id="pass" placeholder="Digite sua senha">
+        </div>
+
+        <button class="login-btn" onclick="login()">
+            Entrar
+        </button>
+
+        <div class="footer">
+            Interface moderna estilo ChatGPT
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CHAT -->
+
+<div id="chatApp">
+
+    <div class="sidebar">
+        <h2>💬 Chats</h2>
+
+        <div class="new-chat" onclick="clearChat()">
+            + Novo Chat
+        </div>
+    </div>
+
+    <div class="chat-container">
+
+        <div class="chat-header">
+            ChatGPT Fake Moderno
+        </div>
+
+        <div id="messages"></div>
+
+        <div class="input-area">
+            <input
+                type="text"
+                id="msgInput"
+                placeholder="Digite sua mensagem..."
+                onkeydown="handleEnter(event)"
+            >
+
+            <button class="send-btn" onclick="sendMessage()">
+                ➤
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* LOGIN */
+
+function login(){
+
+    const user = document.getElementById("user").value.trim();
+    const pass = document.getElementById("pass").value.trim();
+
+    if(user === "" || pass === ""){
+        alert("Preencha todos os campos!");
+        return;
+    }
+
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("chatApp").style.display = "flex";
+}
+
+/* ENTER */
+
+function handleEnter(event){
+    if(event.key === "Enter"){
+        sendMessage();
+    }
+}
+
+/* ENVIAR */
+
+function sendMessage(){
+
+    const input = document.getElementById("msgInput");
+
+    const text = input.value.trim();
+
+    if(text === "") return;
+
+    addMessage(text,"user");
+
+    input.value = "";
+
+    scrollBottom();
+
+    showTyping();
+
+    setTimeout(()=>{
+
+        removeTyping();
+
+        const respostas = [
+            "Olá 👋",
+            "Como posso ajudar?",
+            "Interessante 😄",
+            "Pode me explicar melhor?",
+            "Estou processando sua mensagem...",
+            "Isso parece legal 🚀"
+        ];
+
+        const resposta =
+            respostas[Math.floor(Math.random()*respostas.length)];
+
+        addMessage(resposta,"bot");
+
+        scrollBottom();
+
+    },1200);
+}
+
+/* ADICIONAR MSG */
+
+function addMessage(text,type){
+
+    const msg = document.createElement("div");
+
+    msg.className = `message ${type}`;
+
+    const bubble = document.createElement("div");
+
+    bubble.className = "bubble";
+
+    bubble.innerText = text;
+
+    msg.appendChild(bubble);
+
+    document.getElementById("messages").appendChild(msg);
+}
+
+/* TYPING */
+
+function showTyping(){
+
+    const typing = document.createElement("div");
+
+    typing.id = "typing";
+
+    typing.className = "message bot";
+
+    typing.innerHTML = `
+        <div class="bubble typing">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    `;
+
+    document.getElementById("messages").appendChild(typing);
+
+    scrollBottom();
+}
+
+function removeTyping(){
+
+    const typing = document.getElementById("typing");
+
+    if(typing){
+        typing.remove();
+    }
+}
+
+/* SCROLL */
+
+function scrollBottom(){
+
+    const messages = document.getElementById("messages");
+
+    messages.scrollTop = messages.scrollHeight;
+}
+
+/* LIMPAR CHAT */
+
+function clearChat(){
+
+    document.getElementById("messages").innerHTML = "";
+}
+
+</script>
+
+</body>
+</html>
